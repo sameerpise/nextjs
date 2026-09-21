@@ -28,6 +28,12 @@ export default function Navbar() {
 
                 <nav className="flex items-center gap-2 sm:gap-4">
                     <Link
+                        href="/explore"
+                        className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors px-3 py-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
+                    >
+                        Explore
+                    </Link>
+                    <Link
                         href="/dashboard"
                         className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors px-3 py-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
                     >
