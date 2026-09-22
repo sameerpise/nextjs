@@ -39,6 +39,7 @@ export default function Navbar() {
                     >
                         Dashboard
                     </Link>
+
                     <Link
                         href="/login"
                         className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors px-3.5 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
