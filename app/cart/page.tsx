@@ -43,7 +43,7 @@ export default function CartPage() {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-lg text-zinc-900 dark:text-zinc-100">{item.name}</h3>
-                                            <p className="text-zinc-500 dark:text-zinc-400 font-medium">${item.price.toFixed(2)}</p>
+                                            <p className="text-zinc-500 dark:text-zinc-400 font-medium">₹{item.price.toFixed(2)}</p>
                                         </div>
                                     </div>
                                     
@@ -83,7 +83,7 @@ export default function CartPage() {
                     <div className="bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex flex-col gap-1 w-full md:w-auto">
                             <span className="text-zinc-500 dark:text-zinc-400 font-medium">Order Total</span>
-                            <span className="font-bold text-3xl tracking-tight text-zinc-900 dark:text-zinc-100">${subtotal.toFixed(2)}</span>
+                            <span className="font-bold text-3xl tracking-tight text-zinc-900 dark:text-zinc-100">₹{subtotal.toFixed(2)}</span>
                         </div>
                         <Link href="/product/checkout" className="w-full md:w-auto bg-indigo-600 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/20 transition-all text-lg text-center">
                             Proceed to Checkout
