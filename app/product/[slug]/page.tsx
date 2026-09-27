@@ -1,17 +1,43 @@
 "use client";
 
-import { use } from "react";
-import { SAMPLE_PRODUCTS } from "../page";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/app/context/cartcontext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Product } from "@/app/type/cart";
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
-    const product = SAMPLE_PRODUCTS.find((p) => p._id === slug);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
     const { addToCart } = useCart();
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`http://localhost:5001/api/products/${slug}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setProduct(data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch product:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProduct();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="max-w-6xl mx-auto p-6 md:p-8 flex items-center justify-center min-h-[50vh]">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            </div>
+        );
+    }
 
     if (!product) {
         return (

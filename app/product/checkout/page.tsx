@@ -13,15 +13,46 @@ export default function CheckoutPage() {
     const shippingRate = 99;
     const total = subtotal > 0 ? subtotal + shippingRate : 0;
 
-    const handleCheckout = (e: React.FormEvent) => {
+    const handleCheckout = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsProcessing(true);
         
-        // Simulate processing - In the future, this is where you'd initialize Razorpay
-        setTimeout(() => {
-            alert("Razorpay integration will be added here! Your total is ₹" + total.toFixed(2));
+        try {
+            // Prepare items array for the payment service
+            const checkoutItems = cart.map(item => ({
+                productId: item._id,
+                quantity: item.quantity
+            }));
+
+            // Call the Payment Microservice (running on port 5002)
+            const response = await fetch('http://localhost:5002/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    items: checkoutItems,
+                    billingDetails: {
+                        // In a real app, you would extract form values here
+                        name: "Customer Name" 
+                    }
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(`Success: ${data.message}\n\nVerified Total from Server: ₹${data.finalTotal.toFixed(2)}`);
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+
+        } catch (error) {
+            console.error("Checkout failed:", error);
+            alert("Failed to connect to the payment service. Make sure it's running on port 5002!");
+        } finally {
             setIsProcessing(false);
-        }, 1500);
+        }
     };
 
     if (cart.length === 0) {
