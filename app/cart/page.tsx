@@ -85,9 +85,23 @@ export default function CartPage() {
                             <span className="text-zinc-500 dark:text-zinc-400 font-medium">Order Total</span>
                             <span className="font-bold text-3xl tracking-tight text-zinc-900 dark:text-zinc-100">₹{subtotal.toFixed(2)}</span>
                         </div>
-                        <Link href="/product/checkout" className="w-full md:w-auto bg-indigo-600 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/20 transition-all text-lg text-center">
+                        <button 
+                            onClick={async () => {
+                                try {
+                                    const res = await fetch('/api/auth/me');
+                                    if (res.ok) {
+                                        window.location.href = "/product/checkout";
+                                    } else {
+                                        window.location.href = "/login?callbackUrl=/product/checkout";
+                                    }
+                                } catch (error) {
+                                    window.location.href = "/login?callbackUrl=/product/checkout";
+                                }
+                            }}
+                            className="w-full md:w-auto bg-indigo-600 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/20 transition-all text-lg text-center"
+                        >
                             Proceed to Checkout
-                        </Link>
+                        </button>
                     </div>
                 </div>
             )}

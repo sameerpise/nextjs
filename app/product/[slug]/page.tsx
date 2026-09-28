@@ -93,9 +93,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     
                     <div className="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800">
                         <button 
-                            onClick={() => {
-                                addToCart(product);
-                                router.push("/product/checkout");
+                            onClick={async () => {
+                                try {
+                                    const res = await fetch('/api/auth/me');
+                                    if (res.ok) {
+                                        addToCart(product);
+                                        router.push("/product/checkout");
+                                    } else {
+                                        router.push("/login?callbackUrl=/product/checkout");
+                                    }
+                                } catch (error) {
+                                    router.push("/login?callbackUrl=/product/checkout");
+                                }
                             }}
                             className="w-full sm:w-auto bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-indigo-700 hover:shadow-md transition-all flex items-center justify-center"
                         >
