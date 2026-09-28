@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useCart } from "@/app/context/cartcontext";
 
 interface LogoutButtonProps {
     className?: string;
@@ -10,6 +11,7 @@ interface LogoutButtonProps {
 export default function LogoutButton({ className }: LogoutButtonProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { clearCart } = useCart();
 
     async function handleLogout() {
         if (loading) return;
@@ -19,6 +21,11 @@ export default function LogoutButton({ className }: LogoutButtonProps) {
             await fetch("/api/auth/logout", {
                 method: "POST",
             });
+            
+            // Clear cart from context and localStorage
+            clearCart();
+            localStorage.removeItem("shopping-cart");
+            
             router.push("/login");
             router.refresh();
         } catch (error) {
