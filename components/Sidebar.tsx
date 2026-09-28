@@ -2,9 +2,22 @@
 
 import Link from 'next/link';
 import { useSidebar } from './SidebarProvider';
+import { useEffect, useState } from 'react';
 
 export default function Sidebar() {
   const { isOpen, setIsOpen } = useSidebar();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+        if (data.user && data.user.role === 'admin') {
+          setIsAdmin(true);
+        }
+      })
+      .catch(err => console.error("Error fetching user data in sidebar", err));
+  }, []);
 
   return (
     <>
@@ -63,6 +76,18 @@ export default function Sidebar() {
               </svg>
               Settings
             </Link>
+
+            {isAdmin && (
+              <Link 
+                href="/admin/users" 
+                className="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/30 hover:text-amber-800 dark:hover:text-amber-200 group transition-colors"
+              >
+                <svg className="w-5 h-5 mr-3 text-amber-500 group-hover:text-amber-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Admin Panel
+              </Link>
+            )}
           </nav>
         </div>
       </aside>

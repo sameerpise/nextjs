@@ -2,13 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useSidebar } from "./SidebarProvider";
 import { useCart } from "../app/context/cartcontext";
+
 export default function Navbar() {
     const pathname = usePathname();
     const isDashboard = pathname?.startsWith("/dashboard");
     const { toggle, isOpen } = useSidebar();
     const { totalItems } = useCart();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [authChecked, setAuthChecked] = useState(false);
+
+    useEffect(() => {
+        fetch("/api/auth/me")
+            .then(res => {
+                setIsLoggedIn(res.ok);
+                setAuthChecked(true);
+            })
+            .catch(() => {
+                setIsLoggedIn(false);
+                setAuthChecked(true);
+            });
+    }, []);
+
     return (
         <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/75 dark:bg-zinc-950/75 backdrop-blur-md">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -68,23 +85,28 @@ export default function Navbar() {
                         Products
                     </Link>
 
-                    <Link
-                        href="/login"
-                        className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors px-3.5 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
-                    >
-                        Sign In
-                    </Link>
+                    {authChecked && !isLoggedIn && (
+                        <>
+                            <Link
+                                href="/login"
+                                className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors px-3.5 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                href="/signup"
+                                className="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-600/20 px-4 py-2 rounded-lg transition-all hover:shadow-indigo-600/30"
+                            >
+                                Get Started
+                            </Link>
+                        </>
+                    )}
 
-                    <Link href="/cart">
-                        Cart ({totalItems})
-                    </Link>
-
-                    <Link
-                        href="/signup"
-                        className="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-600/20 px-4 py-2 rounded-lg transition-all hover:shadow-indigo-600/30"
-                    >
-                        Get Started
-                    </Link>
+                    {authChecked && isLoggedIn && (
+                        <Link href="/cart" className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors px-3.5 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/60">
+                            Cart {totalItems > 0 ? `(${totalItems})` : ''}
+                        </Link>
+                    )}
                 </nav>
             </div>
         </header >
