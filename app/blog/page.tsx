@@ -27,6 +27,24 @@ const posts: Post[] = [
         description: 'Why clean URL parameters improve indexing and user experience. A deep dive into SEO basics for developers.',
         date: 'March 12, 2026',
     },
+    {
+        slug: 'react-server-components',
+        title: 'Understanding React Server Components',
+        description: 'A deep dive into how RSCs change the way we build React applications for better performance and developer experience.',
+        date: 'March 5, 2026',
+    },
+    {
+        slug: 'optimizing-web-vitals',
+        title: 'Optimizing Core Web Vitals',
+        description: 'Actionable strategies to improve your LCP, INP, and CLS scores for a faster, more accessible web application.',
+        date: 'February 28, 2026',
+    },
+    {
+        slug: 'typescript-advanced-patterns',
+        title: 'Advanced TypeScript Patterns',
+        description: 'Level up your type safety with mapped types, conditional types, and generic constraints in your Next.js projects.',
+        date: 'February 15, 2026',
+    },
 ];
 
 export default function BlogPage() {
